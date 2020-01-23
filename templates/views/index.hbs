@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
 
-</head>
-<body>
-    {{>header}}
-    {{>footer}}
-</body>
+    </head>
+    <body>
+        {{>header}}
+        <form id="search-form">
+            <input type="text" placeholder="Location" id="search"/>
+            <button type="submit" id="submit">Submit</button>
+        </form>
+
+        <p id="message1"></p>
+        <p id="message2"></p>
+        {{>footer}}
+        <script src="/js/script.js"></script>
+    </body>
 </html>
