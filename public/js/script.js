@@ -18,7 +18,7 @@ const selectCity = (city) => {
                 citiesList.innerHTML = `<h4>${name}</h4>
                 <p>${data.summary}</p>
                 <p>Temperature: ${data.temperature}&#176;C</p>
-                <p>Probability of precipitation: ${data.precip_probab}%</p>
+                <p>Probability of precipitation: ${data.precip_probab*100}%</p>
                 <p>Humidity: ${data.humidity*100}%</p>
                 <p>Wind Speed: ${data.wind_speed} km/h</p>
                 <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>`;
