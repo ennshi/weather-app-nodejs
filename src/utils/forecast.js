@@ -11,7 +11,9 @@ const forecast = (longtitude, latitude, callback) => {
             callback(undefined, {summary: res.body.daily.data[0].summary,
                 temperature: res.body.currently.temperature,
                 precip_probab: res.body.currently.precipProbability,
-                icon: res.body.currently.icon
+                icon: res.body.currently.icon,
+                wind_speed: res.body.currently.windSpeed,
+                humidity: res.body.currently.humidity
             });
         }
     });

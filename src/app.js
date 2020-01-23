@@ -1,9 +1,8 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
-const geocode = require('./utils/geocode');
 const forecast = require('./utils/forecast');
-
+const citiesFinder = require('./utils/allthecities');
 
 const port = process.env.PORT | 3000;
 const publicDirPath = path.join(__dirname, '../public');
@@ -40,23 +39,31 @@ app.get('/weather', (req, res) => {
     if(!req.query.address) {
         return res.send({ error: 'Please provide a location' });
     }
-    geocode(req.query.address, (err, {latitude, longitude, location}) => {
+    citiesFinder(req.query.address, (err, citiesList) => {
+        if(err) {
+            return res.send({error: err});
+        }
+        res.send({cities: citiesList});
+    })
+});
+
+app.get('/resultfor', (req, res) => {
+    if(!req.query.long || !req.query.lat) {
+        return res.send({ error: 'The coordinates are not correct' });
+    }
+    forecast(req.query.long, req.query.lat, (err, {summary, icon, temperature, precip_probab, wind_speed, humidity}={}) => {
         if (err) {
             return res.send({ error: err });
         }
-        forecast(longitude, latitude, (err, {summary, icon, temperature, precip_probab}) => {
-            if (err) {
-                return res.send({ error: err });
-            }
-            res.send({ location,
-                            summary,
-                            icon,
-                            temperature,
-                            precip_probab,
-                            address: req.query.address
-            });
+         res.send({summary,
+                        icon,
+                        temperature,
+                        precip_probab,
+                        wind_speed,
+                        humidity
         });
     });
+
 });
 
 app.get('*', (req, res) => {
