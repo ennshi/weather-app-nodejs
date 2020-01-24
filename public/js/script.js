@@ -15,13 +15,19 @@ const selectCity = (city) => {
             if (data.error) {
                 errorMessage.textContent = data.error;
             } else {
-                citiesList.innerHTML = `<h4>${name}</h4>
+                citiesList.innerHTML = `<h2>${name}</h2>
+                <div id="weather-block">
+                <div id="weather">
                 <p>${data.summary}</p>
                 <p>Temperature: ${data.temperature}&#176;C</p>
                 <p>Probability of precipitation: ${data.precip_probab*100}%</p>
                 <p>Humidity: ${data.humidity*100}%</p>
                 <p>Wind Speed: ${data.wind_speed} km/h</p>
-                <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>`;
+                </div>
+                <div id="weather-icon">
+                <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
+                </div>
+                </div>`;
             }
         });
     });
@@ -42,7 +48,8 @@ searchInput.addEventListener('input', () => {
                     result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
                                 data-lat="${city.coordinates[1]}" 
                                 data-location="${city.name}, ${city.country}">
-                                ${city.name}, ${city.adminCode}, ${city.country}</p>`;
+                                <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
+                                </span></p>`;
                 return result}, '');
                 citiesList.innerHTML = cities;
             }
@@ -57,8 +64,9 @@ searchForm.addEventListener('submit', (e) => {
     cities = cities.reduce((result, city) => {
         result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
                       data-lat="${city.coordinates[1]}" 
-                      data-location="${city.name}, ${city.adminCode}, ${city.country}">
-                      ${city.name}, ${city.adminCode}, ${city.country}</p>`;
+                      data-location="${city.name}, ${city.country}">
+                      <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
+                      </span></p>`;
         return result}, '');
     if(!cities.length) errorMessage.textContent = 'No city found';
     citiesList.innerHTML = cities;

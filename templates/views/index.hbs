@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/styles.css" />
+        <link rel="icon" href="/images/weather.png">
     </head>
     <body>
         {{>header}}
@@ -9,7 +11,6 @@
             <input type="text" placeholder="City" id="search"/>
             <button type="submit" id="submit">Submit</button>
         </form>
-
         <p id="error-message"></p>
         <div id="cities-list"></div>
         {{>footer}}
