@@ -19,15 +19,16 @@ const selectCity = (city) => {
                 <div id="weather-block">
                 <div id="weather">
                 <p>${data.summary}</p>
-                <p>Temperature: ${data.temperature}&#176;C</p>
-                <p>Probability of precipitation: ${data.precip_probab*100}%</p>
-                <p>Humidity: ${data.humidity*100}%</p>
-                <p>Wind Speed: ${data.wind_speed} km/h</p>
+                <p>Temperature: ${(data.temperature).toFixed(1)}&#176;C</p>
+                <p>Probability of precipitation: ${(data.precip_probab*100).toFixed(0)}%</p>
+                <p>Humidity: ${(data.humidity*100).toFixed(0)}%</p>
+                <p>Wind Speed: ${(data.wind_speed).toFixed(1)} km/h</p>
                 </div>
                 <div id="weather-icon">
                 <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
                 </div>
                 </div>`;
+                errorMessage.textContent = '';
                 searchInput.value = '';
             }
         });

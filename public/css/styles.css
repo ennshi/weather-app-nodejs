@@ -61,6 +61,7 @@ button:hover {
 
 ul {
     list-style-type: none;
+    padding: 0;
 }
 
 p {
@@ -82,6 +83,7 @@ a:hover, .cities:hover {
 }
 #cities-list {
     position: relative;
+    min-height: 230px;
 }
 #weather-block{
     width: 100%;
@@ -105,8 +107,14 @@ a:hover, .cities:hover {
 footer {
     position: absolute;
     width: 100%;
-    bottom: 50px;
-    font-size: 1.2rem;
+    bottom: 30px;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+footer p {
+    font-size: 1rem;
+    letter-spacing: 1px;
 }
 
 a {
@@ -121,12 +129,24 @@ a {
 
     footer {
         position: static;
-        margin-top: 60px;
+        font-size: 1.7rem;
+    }
+    .cities {
+        font-size: 1.5rem;
     }
 
     #weather-icon img {
         width: 150px;
         padding-left: 20px;
+    }
+
+}
+
+@media only screen and (max-height: 630px) {
+
+    footer {
+        position: static;
+        margin-top: 20px;
     }
 
 }
