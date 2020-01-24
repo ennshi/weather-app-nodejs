@@ -28,6 +28,7 @@ const selectCity = (city) => {
                 <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
                 </div>
                 </div>`;
+                searchInput.value = '';
             }
         });
     });
@@ -59,7 +60,8 @@ searchInput.addEventListener('input', () => {
 
 searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const regex = new RegExp(`^${search}$`);
+    const cityName = search.toLowerCase().replace(/^\w/, c => c.toUpperCase());
+    const regex = new RegExp(`^${cityName}$`);
     let cities = citiesData.filter(city => city.name.match(regex));
     cities = cities.reduce((result, city) => {
         result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
