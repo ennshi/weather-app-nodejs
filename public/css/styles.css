@@ -6,8 +6,6 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-    background: linear-gradient(to bottom, white 30%, whitesmoke) no-repeat center center fixed;
-    background-size: cover;
 }
 
 header {
@@ -88,7 +86,7 @@ a:hover, .cities:hover {
 
 #cities-list {
     position: relative;
-    min-height: 230px;
+    min-height: 270px;
 }
 
 #weather-block{
