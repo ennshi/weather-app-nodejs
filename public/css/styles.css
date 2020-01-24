@@ -6,7 +6,10 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
+    background: linear-gradient(to bottom, white 30%, whitesmoke) no-repeat center center fixed;
+    background-size: cover;
 }
+
 header {
     margin: 0;
     padding: 0;
@@ -55,6 +58,7 @@ button {
     font-family: 'Amatic SC', cursive;
     font-size: 1.6rem;
 }
+
 button:hover {
     cursor: pointer;
 }
@@ -81,10 +85,12 @@ p {
 a:hover, .cities:hover {
     font-weight: bold;
 }
+
 #cities-list {
     position: relative;
     min-height: 230px;
 }
+
 #weather-block{
     width: 100%;
     display: flex;
@@ -143,7 +149,6 @@ a {
 }
 
 @media only screen and (max-height: 630px) {
-
     footer {
         position: static;
         margin-top: 20px;
