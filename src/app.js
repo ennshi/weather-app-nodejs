@@ -4,7 +4,7 @@ const hbs = require('hbs');
 const forecast = require('./utils/forecast');
 const citiesFinder = require('./utils/allthecities');
 
-const port = process.env.PORT | 3000;
+const port = process.env.PORT || 3000;
 const publicDirPath = path.join(__dirname, '../public');
 const viewsPath = path.join(__dirname, '../templates/views');
 const partialsPath = path.join(__dirname, '../templates/partials');
