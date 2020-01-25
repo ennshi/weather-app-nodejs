@@ -63,6 +63,7 @@ searchInput.addEventListener('input', () => {
         });
     } else {
         citiesList.innerHTML = '';
+        errorMessage.textContent = '';
     }
 });
 
