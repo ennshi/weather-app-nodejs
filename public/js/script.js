@@ -14,7 +14,7 @@ const selectCity = (city) => {
         res.json().then((data) => {
             if (data.error) {
                 errorMessage.textContent = data.error;
-                citiesList.innerHTML = '<img src="/images/error_cloud.gif" alt="clouds">';
+                citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
             } else {
                 citiesList.innerHTML = `<h2>${name}</h2>
                 <div id="weather-block">
@@ -26,7 +26,7 @@ const selectCity = (city) => {
                         <p>Wind Speed: ${Math.round(data.wind_speed)} km/h</p>
                     </div>
                     <div id="weather-icon">
-                        <img id="clouds" src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
+                        <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
                     </div>
                 </div>`;
                 errorMessage.textContent = '';
