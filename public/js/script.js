@@ -73,8 +73,12 @@ searchForm.addEventListener('submit', (e) => {
                       <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
                       </span></p>`;
         return result}, '');
-    if(!cities.length) errorMessage.textContent = 'No city found';
+    if(!cities.length) {
+        errorMessage.textContent = 'No city found';
+        citiesList.innerHTML = '<img src="/images/error_cloud.gif" alt="clouds">';
+    };
     citiesList.innerHTML = cities;
+    errorMessage.textContent = '';
 });
 
 
