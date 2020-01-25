@@ -48,14 +48,14 @@ searchInput.addEventListener('input', () => {
                     errorMessage.textContent = '';
                     citiesData = [...data.cities];
                     let cities = data.cities;
-                    if (cities.length > 10) cities = cities.slice(0, 10);
+                    if (cities.length > 5) cities = cities.slice(0, 5);
                     cities = cities.reduce((result, city) => {
                         result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
                                 data-lat="${city.coordinates[1]}" 
                                 data-location="${city.name}, ${city.country}">
                                 <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
                                 </span></p>`;
-                        return result
+                        return result;
                     }, '');
                     citiesList.innerHTML = cities;
                 }
