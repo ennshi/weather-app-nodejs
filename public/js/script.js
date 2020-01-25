@@ -41,6 +41,7 @@ searchInput.addEventListener('input', () => {
         res.json().then((data) => {
             if (data.error) {
                 errorMessage.textContent = data.error;
+                citiesList.innerHTML = '';
             } else {
                 errorMessage.textContent = '';
                 citiesData = [...data.cities];
