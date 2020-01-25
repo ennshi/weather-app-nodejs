@@ -14,6 +14,7 @@ const selectCity = (city) => {
         res.json().then((data) => {
             if (data.error) {
                 errorMessage.textContent = data.error;
+                citiesList.innerHTML = '<img src="/images/error_cloud.gif" alt="clouds">';
             } else {
                 citiesList.innerHTML = `<h2>${name}</h2>
                 <div id="weather-block">
@@ -41,7 +42,7 @@ searchInput.addEventListener('input', () => {
         res.json().then((data) => {
             if (data.error) {
                 errorMessage.textContent = data.error;
-                citiesList.innerHTML = '';
+                citiesList.innerHTML = '<img src="/images/error_cloud.gif" alt="clouds">';
             } else {
                 errorMessage.textContent = '';
                 citiesData = [...data.cities];

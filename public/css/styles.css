@@ -88,6 +88,10 @@ a:hover, .cities:hover {
     position: relative;
     min-height: 270px;
 }
+#cities-list img{
+    width: 150px;
+    margin: 0 auto;
+}
 
 #weather-block{
     width: 100%;
