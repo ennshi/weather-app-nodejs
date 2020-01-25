@@ -88,7 +88,7 @@ a:hover, .cities:hover {
     position: relative;
     min-height: 270px;
 }
-#cities-list img{
+#clouds {
     width: 150px;
     margin: 0 auto;
 }

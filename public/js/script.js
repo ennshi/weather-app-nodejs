@@ -18,16 +18,16 @@ const selectCity = (city) => {
             } else {
                 citiesList.innerHTML = `<h2>${name}</h2>
                 <div id="weather-block">
-                <div id="weather">
-                <p>${data.summary}</p>
-                <p>Temperature: ${Math.round(data.temperature)}&#176;C</p>
-                <p>Probability of precipitation: ${(data.precip_probab*100).toFixed(0)}%</p>
-                <p>Humidity: ${(data.humidity*100).toFixed(0)}%</p>
-                <p>Wind Speed: ${Math.round(data.wind_speed)} km/h</p>
-                </div>
-                <div id="weather-icon">
-                <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
-                </div>
+                    <div id="weather">
+                        <p>${data.summary}</p>
+                        <p>Temperature: ${Math.round(data.temperature)}&#176;C</p>
+                        <p>Probability of precipitation: ${(data.precip_probab*100).toFixed(0)}%</p>
+                        <p>Humidity: ${(data.humidity*100).toFixed(0)}%</p>
+                        <p>Wind Speed: ${Math.round(data.wind_speed)} km/h</p>
+                    </div>
+                    <div id="weather-icon">
+                        <img id="clouds" src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
+                    </div>
                 </div>`;
                 errorMessage.textContent = '';
                 searchInput.value = '';
@@ -42,7 +42,7 @@ searchInput.addEventListener('input', () => {
         res.json().then((data) => {
             if (data.error) {
                 errorMessage.textContent = data.error;
-                citiesList.innerHTML = '<img src="/images/error_cloud.gif" alt="clouds">';
+                citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
             } else {
                 errorMessage.textContent = '';
                 citiesData = [...data.cities];
@@ -75,7 +75,7 @@ searchForm.addEventListener('submit', (e) => {
         return result}, '');
     if(!cities.length) {
         errorMessage.textContent = 'No city found';
-        citiesList.innerHTML = '<img src="/images/error_cloud.gif" alt="clouds">';
+        citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
     };
     citiesList.innerHTML = cities;
     errorMessage.textContent = '';
