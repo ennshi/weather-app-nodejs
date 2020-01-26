@@ -38,7 +38,9 @@ const selectCity = (city) => {
 
 searchInput.addEventListener('input', () => {
     search = (searchInput.value).trim();
-    if(search) {
+    errorMessage.textContent = "Loading...";
+    citiesList.innerHTML = '<img id="loading" src="/images/loading.gif" alt="clocks">';
+    if(search.length === 2) {
         fetch('/weather?address=' + search).then((res) => {
             res.json().then((data) => {
                 if (data.error) {
@@ -61,6 +63,23 @@ searchInput.addEventListener('input', () => {
                 }
             });
         });
+    } else if( search.length > 2){
+        let cities = citiesData.filter(city => city.name.match(search));
+        if (cities.length > 5) cities = cities.slice(0, 5);
+        cities = cities.reduce((result, city) => {
+            result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
+                      data-lat="${city.coordinates[1]}" 
+                      data-location="${city.name}, ${city.country}">
+                      <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
+                      </span></p>`;
+            return result}, '');
+        if(!cities.length) {
+            errorMessage.textContent = 'No city found';
+            citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
+        } else {
+            citiesList.innerHTML = cities;
+            errorMessage.textContent = '';
+        }
     } else {
         citiesList.innerHTML = '';
         errorMessage.textContent = '';

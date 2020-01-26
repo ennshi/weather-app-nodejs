@@ -90,7 +90,12 @@ a:hover, .cities:hover {
 }
 #clouds {
     width: 150px;
-    margin: 0 auto;
+    margin: 20px auto;
+}
+
+#loading {
+    width: 50px;
+    margin: 20px auto;
 }
 
 #weather-block{
