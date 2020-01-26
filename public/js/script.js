@@ -6,110 +6,115 @@ const citiesList = document.getElementById('cities-list');
 let search = '';
 let citiesData = [];
 
-const selectCity = (city) => {
-    const name = city.getAttribute('data-location');
-    const long = city.getAttribute('data-long');
-    const lat = city.getAttribute('data-lat');
-    fetch('/resultfor?long=' + long+'&lat='+lat).then((res) => {
-        res.json().then((data) => {
-            if (data.error) {
-                errorMessage.textContent = data.error;
-                citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
-            } else {
-                citiesList.innerHTML = `<h2>${name}</h2>
-                <div id="weather-block">
-                    <div id="weather">
-                        <p>${data.summary}</p>
-                        <p>Temperature: ${Math.round(data.temperature)}&#176;C</p>
-                        <p>Probability of precipitation: ${(data.precip_probab*100).toFixed(0)}%</p>
-                        <p>Humidity: ${(data.humidity*100).toFixed(0)}%</p>
-                        <p>Wind Speed: ${Math.round(data.wind_speed)} km/h</p>
-                    </div>
-                    <div id="weather-icon">
-                        <img src="/images/icons/${data.icon}.png" alt="${data.icon}"/>
-                    </div>
-                </div>`;
-                errorMessage.textContent = '';
-                searchInput.value = '';
-            }
-        });
-    });
-};
-
-searchInput.addEventListener('input', () => {
-    search = (searchInput.value).trim();
-    errorMessage.textContent = "Loading...";
-    citiesList.innerHTML = '<img id="loading" src="/images/loading.gif" alt="clocks">';
-    if(search.length === 2 || citiesData.length) {
-        if(search.length === 2) {
-            fetch('/weather?address=' + search).then((res) => {
-                res.json().then((data) => {
-                    if (data.error) {
-                        errorMessage.textContent = data.error;
-                        citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
-                    } else {
-                        errorMessage.textContent = '';
-                        citiesData = [...data.cities];
-                        let cities = [...citiesData];
-                        if (cities.length > 5) cities = cities.slice(0, 5);
-                        cities = cities.reduce((result, city) => {
-                            result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
+const UI = {
+    renderingCities: (cities) => {
+        cities = cities.reduce((result, city) => {
+            result += `<p onclick=Cities.getCityForecast(this) data-long="${city.coordinates[0]}" 
                                 data-lat="${city.coordinates[1]}" 
                                 data-location="${city.name}, ${city.country}">
                                 <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
                                 </span></p>`;
-                            return result;
-                        }, '');
-                        citiesList.innerHTML = cities;
+            return result;
+        }, '');
+        errorMessage.textContent = '';
+        citiesList.innerHTML = cities;
+    },
+
+    renderingForecast(cityName, forecast) {
+        citiesList.innerHTML = `<h2>${cityName}</h2>
+            <div id="weather-block">
+                <div id="weather">
+                    <p>${forecast.summary}</p>
+                    <p>Temperature: ${Math.round(forecast.temperature)}&#176;C</p>
+                    <p>Probability of precipitation: ${(forecast.precip_probab * 100).toFixed(0)}%</p>
+                    <p>Humidity: ${(forecast.humidity * 100).toFixed(0)}%</p>
+                    <p>Wind Speed: ${Math.round(forecast.wind_speed)} km/h</p>
+                </div>
+                <div id="weather-icon">
+                    <img src="/images/icons/${forecast.icon}.png" alt="${forecast.icon}"/>
+                </div>
+            </div>`;
+        errorMessage.textContent = '';
+        searchInput.value = '';
+    },
+
+    renderingInfo(message, namePic) {
+        errorMessage.textContent = message;
+        citiesList.innerHTML = `<img id="${namePic}" src="/images/${namePic}.gif" alt="${namePic}">`;
+    },
+
+    resetResults() {
+        citiesList.innerHTML = '';
+        errorMessage.textContent = '';
+        citiesData = [];
+    }
+};
+
+
+const Cities = {
+    getCityForecast(city) {
+        const name = city.getAttribute('data-location');
+        const long = city.getAttribute('data-long');
+        const lat = city.getAttribute('data-lat');
+        fetch('/resultfor?long=' + long+'&lat='+lat).then((res) => {
+            res.json().then((data) => {
+                if (data.error) {
+                    UI.renderingInfo(data.error, 'cloud');
+                } else {
+                    UI.renderingForecast(name, data);
+                }
+            });
+        });
+    },
+
+    displayCitiesData(citiesResults, cityName, slice) {
+        let cities = [...citiesResults].filter(city => city.name.match(cityName));
+        if (cities.length > 5 && slice === true) cities = cities.slice(0, 5);
+        if(!cities.length) {
+            UI.renderingInfo('No city found', 'cloud');
+        } else {
+            UI.renderingCities(cities);
+        }
+    }
+};
+
+
+searchInput.addEventListener('input', () => {
+    search = (searchInput.value).trim().toLowerCase().replace(/^\w/, c => c.toUpperCase());
+
+    if (search.length === 2 || citiesData.length) {
+        if(search.length === 2) {
+            UI.renderingInfo('Loading...', 'sand-clock');
+            fetch('/weather?address=' + search).then((res) => {
+                res.json().then((data) => {
+                    if (data.error) {
+                        UI.renderingInfo(data.error, 'cloud');
+                    } else {
+                        if(search.length >= 2) {
+                            citiesData = [...data.cities];
+                            Cities.displayCitiesData(citiesData, search, true);
+                        } else {
+                            UI.resetResults();
+                        }
                     }
                 });
             });
-        } else if( search.length > 2 ){
-            let cities = [...citiesData].filter(city => city.name.match(search));
-            if (cities.length > 5) cities = cities.slice(0, 5);
-            cities = cities.reduce((result, city) => {
-                result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
-                      data-lat="${city.coordinates[1]}" 
-                      data-location="${city.name}, ${city.country}">
-                      <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
-                      </span></p>`;
-                return result}, '');
-            if(!cities.length) {
-                errorMessage.textContent = 'No city found';
-                citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
-            } else {
-                citiesList.innerHTML = cities;
-                errorMessage.textContent = '';
-            }
+        } else if (search.length > 2 && citiesData.length) {
+            Cities.displayCitiesData(citiesData, search, true);
         } else {
-            citiesList.innerHTML = '';
-            errorMessage.textContent = '';
+            UI.resetResults();
         }
+    } else if (search.length === 1 || !search.length) {
+        UI.resetResults();
     } else {
-        citiesList.innerHTML = '';
-        errorMessage.textContent = '';
+        UI.renderingInfo('Loading...', 'sand-clock');
     }
 });
 
 searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const cityName = search.toLowerCase().replace(/^\w/, c => c.toUpperCase());
-    const regex = new RegExp(`^${cityName}$`);
-    let cities = citiesData.filter(city => city.name.match(regex));
-    cities = cities.reduce((result, city) => {
-        result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
-                      data-lat="${city.coordinates[1]}" 
-                      data-location="${city.name}, ${city.country}">
-                      <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
-                      </span></p>`;
-        return result}, '');
-    if(!cities.length) {
-        errorMessage.textContent = 'No city found';
-        citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
-    } else {
-        citiesList.innerHTML = cities;
-        errorMessage.textContent = '';
-    }
+    const regex = new RegExp(`^${search}`);
+    Cities.displayCitiesData(citiesData, regex, false);
 });
 
 

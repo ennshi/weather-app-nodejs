@@ -88,12 +88,12 @@ a:hover, .cities:hover {
     position: relative;
     min-height: 270px;
 }
-#clouds {
+#cloud {
     width: 150px;
     margin: 20px auto;
 }
 
-#loading {
+#sand-clock {
     width: 50px;
     margin: 20px auto;
 }
