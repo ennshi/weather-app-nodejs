@@ -40,44 +40,49 @@ searchInput.addEventListener('input', () => {
     search = (searchInput.value).trim();
     errorMessage.textContent = "Loading...";
     citiesList.innerHTML = '<img id="loading" src="/images/loading.gif" alt="clocks">';
-    if(search.length === 2) {
-        fetch('/weather?address=' + search).then((res) => {
-            res.json().then((data) => {
-                if (data.error) {
-                    errorMessage.textContent = data.error;
-                    citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
-                } else {
-                    errorMessage.textContent = '';
-                    citiesData = [...data.cities];
-                    let cities = data.cities;
-                    if (cities.length > 5) cities = cities.slice(0, 5);
-                    cities = cities.reduce((result, city) => {
-                        result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
+    if(search.length === 2 || citiesData.length) {
+        if(search.length === 2) {
+            fetch('/weather?address=' + search).then((res) => {
+                res.json().then((data) => {
+                    if (data.error) {
+                        errorMessage.textContent = data.error;
+                        citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
+                    } else {
+                        errorMessage.textContent = '';
+                        citiesData = [...data.cities];
+                        let cities = [...citiesData];
+                        if (cities.length > 5) cities = cities.slice(0, 5);
+                        cities = cities.reduce((result, city) => {
+                            result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
                                 data-lat="${city.coordinates[1]}" 
                                 data-location="${city.name}, ${city.country}">
                                 <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
                                 </span></p>`;
-                        return result;
-                    }, '');
-                    citiesList.innerHTML = cities;
-                }
+                            return result;
+                        }, '');
+                        citiesList.innerHTML = cities;
+                    }
+                });
             });
-        });
-    } else if( search.length > 2){
-        let cities = citiesData.filter(city => city.name.match(search));
-        if (cities.length > 5) cities = cities.slice(0, 5);
-        cities = cities.reduce((result, city) => {
-            result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
+        } else if( search.length > 2 ){
+            let cities = [...citiesData].filter(city => city.name.match(search));
+            if (cities.length > 5) cities = cities.slice(0, 5);
+            cities = cities.reduce((result, city) => {
+                result += `<p onclick=selectCity(this) data-long="${city.coordinates[0]}" 
                       data-lat="${city.coordinates[1]}" 
                       data-location="${city.name}, ${city.country}">
                       <span class="cities">${city.name}, ${city.adminCode}, ${city.country}
                       </span></p>`;
-            return result}, '');
-        if(!cities.length) {
-            errorMessage.textContent = 'No city found';
-            citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
+                return result}, '');
+            if(!cities.length) {
+                errorMessage.textContent = 'No city found';
+                citiesList.innerHTML = '<img id="clouds" src="/images/error_cloud.gif" alt="clouds">';
+            } else {
+                citiesList.innerHTML = cities;
+                errorMessage.textContent = '';
+            }
         } else {
-            citiesList.innerHTML = cities;
+            citiesList.innerHTML = '';
             errorMessage.textContent = '';
         }
     } else {
