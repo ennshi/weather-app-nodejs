@@ -80,7 +80,9 @@ const Cities = {
 
 
 searchInput.addEventListener('input', () => {
-    search = (searchInput.value).trim().toLowerCase().replace(/^\w/, c => c.toUpperCase());
+    search = (searchInput.value).trim().toLowerCase().split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 
     if (search.length === 2 || citiesData.length) {
         if(search.length === 2) {
