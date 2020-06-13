@@ -84,7 +84,7 @@ a:hover, .cities:hover {
     font-weight: bold;
 }
 
-#cities-list {
+#main-container {
     position: relative;
     min-height: 270px;
 }
